@@ -14,7 +14,7 @@ model = YOLO('./models/best_1.pt')
 @app.route('/api/detect', methods = ['POST'])
 def detect():
     if 'image' not in request.files:
-        app.logger.error("No image uploaded !")
+        app.logger.error("No image uploaded !!")
         return jsonify({'error':'No image uploaded'}), 400
     
     image = request.files['image']
