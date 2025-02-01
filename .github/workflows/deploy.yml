@@ -1,0 +1,39 @@
+name: Deploy YOLO Service to Cloud Run
+
+on:
+  push:
+    branches:
+      - yolo_microservice  # Runs only when pushing to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set Up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t us-central1-docker.pkg.dev/bamboo-volt-449523-r5/tras-repo/yolo-microservice .
+          docker push us-central1-docker.pkg.dev/bamboo-volt-449523-r5/tras-repo/yolo-microservice
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy yolo-microservice \
+            --image=us-central1-docker.pkg.dev/bamboo-volt-449523-r5/tras-repo/yolo-microservice \
+            --platform=managed \
+            --region=us-central1 \
+            --memory=2Gi \
+            --allow-unauthenticated
