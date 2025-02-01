@@ -7,7 +7,7 @@ const { default: mongoose } = require('mongoose')
 
 const app = express();
 
-mongoose.connect('mongodb+srv://mongo:mongo@cluster0.sgnam.mongodb.net/tras_db', {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB connected'))
