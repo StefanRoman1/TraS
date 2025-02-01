@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
-app.logger.info("YOLO microservice started.")
+app.logger.info("YOLO microservice started!")
 
 model = YOLO('./models/best_1.pt')
 
