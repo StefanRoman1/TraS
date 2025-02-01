@@ -24,6 +24,9 @@ jobs:
       - name: Configure Docker
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
+      - name: Change directory to yolo microservice.
+        run:  cd microservices/yolo_service
+
       - name: Build and Push Docker Image
         run: |
           docker build -t us-central1-docker.pkg.dev/bamboo-volt-449523-r5/tras-repo/yolo-microservice .
