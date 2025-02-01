@@ -24,13 +24,8 @@ jobs:
       - name: Configure Docker
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      - name: Cache Docker Layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      - name: Define Image Name
+        run: echo "FULL_IMAGE_NAME=us-central1-docker.pkg.dev/bamboo-volt-449523-r5/tras-repo/yolo-microservice" >> $GITHUB_ENV
 
       - name: Set Up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -38,15 +33,16 @@ jobs:
       - name: Build and Push Docker Image (with Cache)
         working-directory: microservices/yolo_service
         run: |
-          docker buildx build --cache-from=type=local,src=/tmp/.buildx-cache \
-                              --cache-to=type=local,dest=/tmp/.buildx-cache \
-                              --tag us-central1-docker.pkg.dev/bamboo-volt-449523-r5/tras-repo/yolo-microservice \
-                              --push .
-      
+          docker buildx build \
+            --cache-from=type=registry,ref=$FULL_IMAGE_NAME:cache \
+            --cache-to=type=registry,ref=$FULL_IMAGE_NAME:cache,mode=max \
+            -t $FULL_IMAGE_NAME . \
+            --push
+
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy yolo-microservice \
-            --image=us-central1-docker.pkg.dev/bamboo-volt-449523-r5/tras-repo/yolo-microservice \
+            --image=$FULL_IMAGE_NAME \
             --platform=managed \
             --region=us-central1 \
             --memory=2Gi \
