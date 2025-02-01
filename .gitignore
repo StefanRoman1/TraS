@@ -84,3 +84,5 @@ microservices/**/venv/
 # Blazegraph
 blazegraph.jnl
 blazegraph-temp/
+
+gcp-key.json

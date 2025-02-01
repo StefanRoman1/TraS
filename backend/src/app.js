@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use('/api/yolo', yoloRoutes)
 app.use('/api/video', videoRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, ()=>{
     console.log(`Node.js backend running on port ${PORT}`)
 })
