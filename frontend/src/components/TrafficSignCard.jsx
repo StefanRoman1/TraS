@@ -1,19 +1,15 @@
 import React from 'react'
 import "../assets/styles/TrafficSignCard.css"
 
-function TrafficSignCard({id, trafficSignClass, ontologyDetails}) {
+function TrafficSignCard({id, trafficSignClass, ontologyDetails, onClick }) {
   return (
-    <div className='trafficSignCard'>
+    <div className='trafficSignCard' onClick={onClick}>
         <span className='trafficSignId'>{`${id+1}. ${trafficSignClass}`}</span>
         <div className="trafficSignOntologyDetails">
-            {Object.keys(ontologyDetails)?.map((key, index)=>{
-                return (
-                    <div key={index} className='ontologyItem'>
-                        <span className='ontologyItemName'>{`${key}: `}</span>
-                        <span>{ontologyDetails[key]}</span>
-                    </div>  
-                )
-            })}
+            <div className="ontologyItem">
+                <span className='ontologyItemName'> Description: </span>
+                <span> {ontologyDetails['description']} </span>
+            </div>
         </div>
     </div>
   )
