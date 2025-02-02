@@ -9,8 +9,10 @@ function LoadInput() {
   const canvasRef = useRef(null);
   const [frameUrls, setFrameUrls] = useState([]);
   const [videoId, setVideoId] = useState()
+  const [extractedImage, setExtractedImage] = useState(null);
+  const [selectedSign, setSelectedSign] = useState(null);
 
-  const { setDetections, detections, loading, setLoading  } = useContext(TrafficSignContext);
+  const { setDetections, detections, loading, setLoading, canvasRefs, croppedCanvas, setCroppedCanvas  } = useContext(TrafficSignContext);
 
   const handleFileChange = async (event) => {
     if (event.target.files) {
@@ -103,6 +105,7 @@ function LoadInput() {
         const filteredDetections = data.video.frames[currentFrameIndex].detections.filter(detection => detection.confidence > 0.7);
         setDetections(filteredDetections)
         setLoading(false);
+        setCroppedCanvas(canvasRef);
 
         drawBoundingBoxes(filteredDetections)
       } else {
@@ -147,7 +150,8 @@ function LoadInput() {
       {!totalFrames && (
         <>
         <h2 className="loadInputLabel">Load Input Video</h2>
-        <input type="file" accept="video/*" onChange={handleFileChange} /></>
+        <label htmlFor="inputButton" className="inputButton"> Choose File </label>
+        <input type="file" id="inputButton" accept="video/*" onChange={handleFileChange}></input></>
       )}
 
       {file && (
