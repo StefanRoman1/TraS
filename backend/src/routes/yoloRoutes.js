@@ -24,6 +24,51 @@ const downloadImage = async (imageUrl, outputPath) => {
     });
   };
 
+/**
+ * @swagger
+ * /detect:
+ *   post:
+ *     summary: Detect traffic signs inside the image and retrieve informations about them.
+ *     description: Receives an image and returns all the traffic signs found and related informations.
+ *     consumes:
+ *       - image/jpg
+ *     parameters:
+ *       - name: image
+ *         in: image
+ *         required: true
+ *         type: jpeg
+ *         description: Image to process
+ *     responses:
+ *       200:
+ *         description: Successfully processed image
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 frames:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: No image uploaded.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Processing microservice error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.post('/detect', upload.single('image'), async(req, res)=>{
     
     let imagePath = null
