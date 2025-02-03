@@ -19,9 +19,6 @@ const swaggerOptions = {
   apis: ['./routes/*.js'],
 };
 
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
 const app = express();
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -33,6 +30,10 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+
+//Swagger Documentation
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //Routes
 app.use('/api/yolo', yoloRoutes)
