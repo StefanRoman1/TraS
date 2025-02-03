@@ -4,6 +4,23 @@ const bodyParser = require('body-parser')
 const yoloRoutes = require('./routes/yoloRoutes')
 const videoRoutes = require('./routes/videoRoutes')
 const { default: mongoose } = require('mongoose')
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Traffic Sign Detection API',
+      version: '1.0.0',
+      description: 'Receives a video file, extracts frames, and detects traffic signs.',
+    },
+  },
+  apis: ['./routes/*.js'],
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const app = express();
 
