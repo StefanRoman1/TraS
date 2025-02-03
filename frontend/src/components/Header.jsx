@@ -1,7 +1,7 @@
-import React from 'react'
-import '../assets/styles/Header.css'
-import logo from "../assets/images/logo.png"
-import uaic from "../assets/images/uaic.png"
+import React from 'react';
+import '../assets/styles/Header.css';
+import logo from '../assets/images/logo.png';
+import uaic from '../assets/images/uaic.png';
 
 function Header() {
   return (
@@ -14,7 +14,7 @@ function Header() {
         Traffic sign smart detector
       </div>
     </div>
-  )
+  );
 }
 
-export default Header
+export default Header;
