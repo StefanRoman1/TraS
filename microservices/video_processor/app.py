@@ -7,6 +7,7 @@ from google.cloud import storage
 from dotenv import load_dotenv
 import io
 import tempfile
+from flasgger import Swagger
 
 load_dotenv()
 
@@ -24,12 +25,66 @@ else:
     print("ERROR: GCS_BUCKET_NAME not set in .env")
 
 app = Flask(__name__)
+Swagger(app)
 
 FRAMES_DIR = "./frames"
 os.makedirs(FRAMES_DIR, exist_ok=True)
 
 @app.route('/api/process-video', methods=['POST'])
 def process_video():
+    """
+    Process a video into frames
+    ---
+    consumes:
+      - application/json
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          required:
+            - videoUrl
+            - videoId
+          properties:
+            videoUrl:
+              type: string
+              description: URL of the video to process
+            videoId:
+              type: string
+              description: Unique video identifier
+            fps:
+              type: integer
+              description: Number of frames to create
+    responses:
+      200:
+        description: Successfully processed video frames
+        schema:
+          type: object
+          properties:
+            framesCount:
+              type: integer
+            frames:
+              type: array
+              items:
+                type: string
+      400:
+        description: Bad Request - Missing parameters or invalid file
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "No video file uploaded or missing videoId"
+      500:
+        description: Internal Server Error - Google Cloud Storage issue
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Error uploading to Google Cloud Storage"
+    """
     data = request.json
     video_url = data.get('videoUrl')
     predefined_fps = data.get('fps', 1)

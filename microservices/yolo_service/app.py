@@ -2,10 +2,12 @@ from flask import Flask, request, jsonify
 from ultralytics import YOLO
 import os
 import logging
+from flasgger import Swagger
 
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+Swagger(app)
 app.logger.info("YOLO microservice started.")
 
 model = YOLO('./models/best_1.pt')
@@ -13,6 +15,34 @@ model = YOLO('./models/best_1.pt')
 
 @app.route('/api/detect', methods = ['POST'])
 def detect():
+    """
+    Upload an image to detect traffic signs
+    ---
+    consumes: 
+     - image/jpg
+    parameters: 
+     - name: image
+       type: image/jpeg
+       required: true
+       description: The image file to process
+    responses:
+      200:
+        description: Successfully detected traffic signs
+        schema:
+            type: object
+            properties:
+                detections:
+                    type: array
+                    items: { class_id: int, confidence: double, bounding_box: array }
+                    example: [ class_id: 1, confidence: 0.99, bounding_box: [x_min: 0, y_min: 0, x_max: 10, y_max: 10] ]
+      400:
+        description: Bad Request - No file uploaded or invalid file type
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     if 'image' not in request.files:
         app.logger.error("No image uploaded")
         return jsonify({'error':'No image uploaded'}), 400

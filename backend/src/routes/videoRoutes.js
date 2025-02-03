@@ -20,6 +20,57 @@ const generateVideoHash = (filePath) =>{
     }); 
 }
 
+/**
+ * @swagger
+ * /upload:
+ *   post:
+ *     summary: Process a video into frames
+ *     description: Receives a video file and returns an array of frames.
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - name: video
+ *         in: formData
+ *         required: true
+ *         type: file
+ *         description: Video file to process
+ *     responses:
+ *       200:
+ *         description: Successfully processed video frames
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 videoId:
+ *                   type: integer
+ *                 videoUrl:
+ *                   type: string
+ *                 framesCount:
+ *                   type: integer
+ *                 frames:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       400:
+ *         description: No video uploaded.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Processing microservice error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.post('/upload', upload.single('video'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No video uploaded' });
