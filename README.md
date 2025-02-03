@@ -81,10 +81,7 @@ The TraS (Traffic Sign Smart Detector) project is a microservice-based web syste
 
 
 <!-- Getting Started -->
-# 	:toolbox: Getting Started
-
-<!-- Installation -->
-## :gear: Installation
+# 	:toolbox: Run locally
 
 Clone the repository
 ```bash
